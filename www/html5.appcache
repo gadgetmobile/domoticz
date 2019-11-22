@@ -596,7 +596,6 @@ app/UsersController.js
 app/UserVariablesController.js
 app/UtilityController.js
 app/WeatherController.js
-app/ZWaveTopologyController.js
 
 js/ace/ace.js
 js/ace/ext-language_tools.js
@@ -718,7 +717,6 @@ views/login.html
 NETWORK:
 index.html
 json.htm
-ozwcp/ozwcp.html
 ozwcp/cp.html
 *
 

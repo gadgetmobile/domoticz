@@ -1,5 +1,4 @@
 var pollhttp;
-var scenehttp;
 var topohttp;
 var stathttp;
 var atsthttp;
@@ -35,41 +34,23 @@ var c=document.createElement('div');
 var b=document.createElement('div');
 var ie=document.all ? true : false;
 var curnode=null;
-var curscene=null;
-var scenes=new Array();
 var routes=new Array();
 var curclassstat=null;
 var classstats=new Array();
 if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
   pollhttp=new XMLHttpRequest();
-} else {
-  pollhttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-  scenehttp=new XMLHttpRequest();
-} else {
-  scenehttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
   topohttp=new XMLHttpRequest();
-} else {
-  topohttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
   stathttp=new XMLHttpRequest();
-} else {
-  stathttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
   atsthttp=new XMLHttpRequest();
-} else {
-  atsthttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
   racphttp=new XMLHttpRequest();
 } else {
+  pollhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  topohttp=new ActiveXObject("Microsoft.XMLHTTP");
+  stathttp=new ActiveXObject("Microsoft.XMLHTTP");
+  atsthttp=new ActiveXObject("Microsoft.XMLHTTP");
   racphttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
+
 function SaveNode(newid)
 {
   var i=newid.substr(4);
@@ -89,7 +70,6 @@ function SaveNode(newid)
   }
   curnode = newid;
   DoNodeHelp();
-  UpdateSceneValues(i);
   document.getElementById(curnode).className='click';
   return true;
 }
@@ -103,7 +83,6 @@ function ClearNode()
     document.getElementById('divconfiginfo').innerHTML='';
     document.getElementById('nodeinfo').style.display = 'none';
     document.getElementById('nodecntl').style.display = 'none';
-    UpdateSceneValues(-1);
     curnode = null;
   }
   return true;
@@ -586,20 +565,7 @@ function DoNetHelp()
   var statclass = document.getElementById('statclass');
   var thcntl = document.getElementById('thcntl');
   var testhealreport = document.getElementById('testhealreport');
-  if (document.NetPost.netops.value == 'scen') {
-    ninfo.innerHTML = 'Scene management and execution.';
-    ninfo.style.display = 'block';
-    scencntl.style.display = 'block';
-    topocntl.style.display = 'none';
-    topo.style.display = 'none';
-    statcntl.style.display = 'none';
-    statnet.style.display = 'none';
-    statnode.style.display = 'none';
-    statclass.style.display = 'none';
-    thcntl.style.display = 'none';
-    testhealreport.style.display = 'none';
-    SceneLoad('load');
-  } else if (document.NetPost.netops.value == 'topo') {
+  if (document.NetPost.netops.value == 'topo') {
     ninfo.innerHTML = 'Topology views';
     ninfo.style.display = 'block';
     scencntl.style.display = 'none';
@@ -611,7 +577,6 @@ function DoNetHelp()
     statclass.style.display = 'none';
     thcntl.style.display = 'none';
     testhealreport.style.display = 'none';
-    curscene = null;
     TopoLoad('load');
   } else if (document.NetPost.netops.value == 'stat') {
     ninfo.innerHTML = 'Statistic views';
@@ -624,7 +589,6 @@ function DoNetHelp()
     statnode.style.display = 'block';
     thcntl.style.display = 'none';
     testhealreport.style.display = 'none';
-    curscene = null;
     StatLoad('load');
   } else if (document.NetPost.netops.value == 'test') {
     ninfo.innerHTML = 'Test & Heal Network';
@@ -638,7 +602,6 @@ function DoNetHelp()
     statclass.style.display = 'none';
     thcntl.style.display = 'block';
     testhealreport.style.display = 'block';
-    curscene = null;
   } else {
     ninfo.style.display = 'none';
     scencntl.style.display = 'none';
@@ -650,7 +613,6 @@ function DoNetHelp()
     statclass.style.display = 'none';
     thcntl.style.display = 'none';
     testhealreport.style.display = 'none';
-    curscene = null;
   }
   return true;
 }
@@ -937,290 +899,6 @@ function DoSavePost()
   posthttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   posthttp.send(params);
 
-  return false;
-}
-function SceneLoad(fun)
-{
-  var params='fun='+fun;
-  if (fun == 'load') {
-    DisplaySceneSceneValue(null);
-    var scenescenevalues = document.getElementById('scenescenevalues');
-    while (scenescenevalues.options.length > 0)
-      scenescenevalues.remove(0);
-  }
-  if (fun == 'delete') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    DisplaySceneSceneValue(null);
-    params=params+'&id='+curscene;
-    var slt = document.getElementById('scenelabeltext');
-    slt.value = '';
-  } else if (fun == 'execute') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    params=params+'&id='+curscene;
-  } else if (fun == 'values') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    params=params+'&id='+curscene;
-    var slt = document.getElementById('scenelabeltext');
-    slt.value = scenes[curscene].label;
-    DisplaySceneSceneValue(null);
-  } else if (fun == 'label') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    var slt = document.getElementById('scenelabeltext');
-    if (slt.value.length == 0) {
-      alert('Missing label text');
-      return false;
-    }
-    params=params+'&id='+curscene+'&label='+slt.value;
-    slt.value = '';
-  } else if (fun == 'addvalue') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    if (curnode == null) {
-      alert('Node not selected');
-      return false;
-    }
-    var values = document.getElementById('scenevalues');
-    if (values.options.selectedIndex == -1) {
-      alert('Value not selected');
-      return false;
-    }
-    var vals = values.options[values.options.selectedIndex].value.split('-');
-    if (vals[3] != 'list' && vals[3] != 'bool') {
-      var value = document.getElementById('valuetext');
-      if (value.value.length == 0) {
-	alert('Data not entered');
-	return false;
-      }
-      params=params+'&id='+curscene+'&vid='+vals[0]+'-'+vals[1]+'-'+vals[2]+'-'+vals[3]+'-'+vals[4]+'-'+vals[5]+'&value='+value.value;
-    } else {
-      var value = document.getElementById('valueselect');
-      params=params+'&id='+curscene+'&vid='+vals[0]+'-'+vals[1]+'-'+vals[2]+'-'+vals[3]+'-'+vals[4]+'-'+vals[5]+'&value='+value.options[value.selectedIndex].value;
-    }
-    DisplaySceneSceneValue(null);
-  } else if (fun == 'update') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    if (curnode == null) {
-      alert('Node not selected');
-      return false;
-    }
-    var values = document.getElementById('scenescenevalues');
-    if (values.options.selectedIndex == -1) {
-      alert('Value not selected');
-      return false;
-    }
-    var vals = values.options[values.options.selectedIndex].value.split('-');
-    if (vals[3] != 'list' && vals[3] != 'bool') {
-      var value = document.getElementById('scenevaluetext');
-      if (value.value.length == 0) {
-	alert('Data not entered');
-	return false;
-      }
-      params=params+'&id='+curscene+'&vid='+vals[0]+'-'+vals[1]+'-'+vals[2]+'-'+vals[3]+'-'+vals[4]+'-'+vals[5]+'&value='+value.value;
-    } else {
-      var value = document.getElementById('valueselect');
-      params=params+'&id='+curscene+'&vid='+vals[0]+'-'+vals[1]+'-'+vals[2]+'-'+vals[3]+'-'+vals[4]+'-'+vals[5]+'&value='+value.options[value.selectedIndex].value;
-    }
-    DisplaySceneSceneValue(null);
-  } else if (fun == 'remove') {
-    if (curscene == null) {
-      alert("Scene not selected");
-      return false;
-    }
-    var values = document.getElementById('scenescenevalues');
-    if (values.options.selectedIndex == -1) {
-      alert('Scene value not selected');
-      return false;
-    }
-    var vals = values.options[values.options.selectedIndex].value.split('-');
-    params=params+'&id='+curscene+'&vid='+vals[0]+'-'+vals[1]+'-'+vals[2]+'-'+vals[3]+'-'+vals[4]+'-'+vals[5];
-    DisplaySceneSceneValue(null);
-  }
-  scenehttp.open('POST','scenepost.html', true);
-  scenehttp.onreadystatechange = SceneReply;
-  scenehttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  scenehttp.send(params);
-
-  return false;
-}
-function SceneReply()
-{
-  var xml;
-  var elem;
-
-  if (scenehttp.readyState == 4 && scenehttp.status == 200) {
-    xml = scenehttp.responseXML;
-    elem = xml.getElementsByTagName('scenes');
-    if (elem.length > 0) {
-      var i;
-      var sceneids = document.getElementById('sceneids');
-      var scenevalues = document.getElementById('scenevalues');
-      var scenescenevalues = document.getElementById('scenescenevalues');
-      var id, home, node, label, units, genre, type, cclass, instance, index;
-      i = elem[0].getAttribute('sceneid');
-      if (i != null) {
-	scenes = new Array();
-	while (sceneids.options.length > 0)
-	  sceneids.remove(0);
-      }
-      i = elem[0].getAttribute('scenevalue');
-      if (i != null) {
-	scenes[curscene].values = new Array();
-	while (scenescenevalues.options.length > 0)
-	  scenescenevalues.remove(0);
-      }
-      for (i = 0; i < elem[0].childNodes.length; i++) {
-	if (elem[0].childNodes[i].nodeType != 1)
-	  continue;
-	if (elem[0].childNodes[i].tagName == 'sceneid') {
-	  id = elem[0].childNodes[i].getAttribute('id');
-	  label = elem[0].childNodes[i].getAttribute('label');
-	  scenes[id] = {label: label, values: new Array()};
-	  sceneids.add(new Option(id, id));
-	} else if (elem[0].childNodes[i].tagName == 'scenevalue') {
-	  var value;
-	  id = elem[0].childNodes[i].getAttribute('id');
-	  home = elem[0].childNodes[i].getAttribute('home');
-	  node = elem[0].childNodes[i].getAttribute('node');
-	  label = elem[0].childNodes[i].getAttribute('label');
-	  units = elem[0].childNodes[i].getAttribute('units');
-	  genre = elem[0].childNodes[i].getAttribute('genre');
-	  type = elem[0].childNodes[i].getAttribute('type');
-	  cclass = elem[0].childNodes[i].getAttribute('class');
-	  instance = elem[0].childNodes[i].getAttribute('instance');
-	  index = elem[0].childNodes[i].getAttribute('index');
-	  value = elem[0].childNodes[i].firstChild.nodeValue;
-	  var val = node+','+label;
-	  var vid = node+'-'+cclass+'-'+genre+'-'+type+'-'+instance+'-'+index;
-	  scenescenevalues.add(new Option(val,vid));
-	  scenes[id].values.push({home: home, node: node, label: label, units: units, type: type, cclass: cclass, genre: genre, instance: instance, index: index, value: value});
-	}
-      }
-    }
-  }
-}
-function UpdateSceneValues(c)
-{
-  var sv = document.getElementById('scenevalues');
-  while (sv.options.length > 0)
-    sv.remove(0);
-  if (c == -1)
-    return;
-  for (var i = 0; i < nodes[c].values.length; i++) {
-    if (nodes[c].values[i].genre != 'user')
-      continue;
-    if (nodes[c].values[i].readonly)
-      continue;
-    if (nodes[c].values[i].type == 'button')
-      continue;
-    var vid=nodes[c].id+'-'+nodes[c].values[i].cclass+'-user-'+nodes[c].values[i].type+'-'+nodes[c].values[i].instance+'-'+nodes[c].values[i].index;
-    sv.add(new Option(nodes[c].values[i].label,vid));
-  }
-  DisplaySceneValue(null);
-}
-function DisplaySceneValue(opt)
-{
-  var vt = document.getElementById('valuetext');
-  var vs = document.getElementById('valueselect');
-  var vu = document.getElementById('valueunits');
-  if (opt == null) {
-    vt.style.display = 'inline';
-    vs.style.display = 'none';
-    vt.value = '';
-    while(vs.options.length > 0)
-      vs.remove(0);
-    vu.innerHTML = '';
-    return false;
-  }
-  var vals = opt.value.split('-');
-  var j;
-  for (j = 0; j < nodes[vals[0]].values.length; j++)
-    if (nodes[vals[0]].values[j].cclass == vals[1] &&
-	nodes[vals[0]].values[j].genre == 'user' &&
-	nodes[vals[0]].values[j].type == vals[3] &&
-	nodes[vals[0]].values[j].instance == vals[4] &&
-	nodes[vals[0]].values[j].index == vals[5])
-      break;
-  if (vals[3] == 'list') {
-    vt.style.display = 'none';
-    vs.style.display = 'inline';
-  } else if (vals[3] == 'bool') {
-    if (nodes[vals[0]].values[j].value == 'True') {
-      vs.add(new Option('On','true',true));
-      vs.add(new Option('Off','false'));
-    } else {
-      vs.add(new Option('Off','false',true));
-      vs.add(new Option('On','true'));
-    }
-    vt.style.display = 'none';
-    vs.style.display = 'inline';
-  } else {
-    vt.value = nodes[vals[0]].values[j].value;
-    vt.style.display = 'inline';
-    vs.style.display = 'none';
-  }
-  vu.innerHTML = nodes[vals[0]].values[j].units;
-  return false;
-}
-function DisplaySceneSceneValue(opt)
-{
-  var vt = document.getElementById('scenevaluetext');
-  var vs = document.getElementById('scenevalueselect');
-  var vu = document.getElementById('scenevalueunits');
-  if (opt == null) {
-    vt.style.display = 'inline';
-    vs.style.display = 'none';
-    vt.value = '';
-    while(vs.options.length > 0)
-      vs.remove(0);
-    vu.innerHTML = '';
-    return false;
-  }
-  var vals = opt.value.split('-');
-  var j;
-  for (j = 0; j < scenes[curscene].values.length; j++) {
-    if (scenes[curscene].values[j].cclass == vals[1] &&
-	scenes[curscene].values[j].genre == 'user' &&
-	scenes[curscene].values[j].type == vals[3] &&
-	scenes[curscene].values[j].instance == vals[4] &&
-	scenes[curscene].values[j].index == vals[5])
-      break;
-  }
-  if (vals[3] == 'list') {
-    vt.style.display = 'none';
-    vs.style.display = 'inline';
-  } else if (vals[3] == 'bool') {
-    if (scenes[curscene].values[j].value == 'True') {
-      vs.add(new Option('On','on',true));
-      vs.add(new Option('Off','off'));
-    } else {
-      vs.add(new Option('Off','off',true));
-      vs.add(new Option('On','on'));
-    }
-    vt.style.display = 'none';
-    vs.style.display = 'inline';
-  } else {
-    vt.value = scenes[curscene].values[j].value;
-    vt.style.display = 'inline';
-    vs.style.display = 'none';
-  }
-  vu.innerHTML = scenes[curscene].values[j].units;
   return false;
 }
 function TopoLoad(fun)
