@@ -16,7 +16,6 @@ var nodegrpgrp=new Array();
 var nodepoll=new Array();
 var nodepollpoll=new Array();
 var astate = false;
-var needsave=0;
 var nodecount;
 var nodeid;
 var sucnodeid;
@@ -122,28 +121,14 @@ function PollReply()
     elem = xml.getElementsByTagName('poll');
     if (elem.length > 0) {
       var changed=false;
-      if (elem[0].getAttribute('homeid') != document.getElementById('homeid').value)
-	document.getElementById('homeid').value = elem[0].getAttribute('homeid');
       if (elem[0].getAttribute('nodecount') != nodecount) {
-	nodecount = elem[0].getAttribute('nodecount');
-	document.getElementById('nodecount').value = nodecount;
-      }
+		nodecount = elem[0].getAttribute('nodecount');
+	  }
       if (elem[0].getAttribute('nodeid') != nodeid) {
-	nodeid = elem[0].getAttribute('nodeid');
+		nodeid = elem[0].getAttribute('nodeid');
       }
       if (elem[0].getAttribute('sucnodeid') != sucnodeid) {
-	sucnodeid = elem[0].getAttribute('sucnodeid');
-	document.getElementById('sucnodeid').value = sucnodeid;
-      }
-      if (elem[0].getAttribute('cmode') != document.getElementById('cmode').value)
-	document.getElementById('cmode').value = elem[0].getAttribute('cmode');
-      if (elem[0].getAttribute('save') != needsave) {
-	needsave = elem[0].getAttribute('save');
-	if (needsave == '1') {
-	  document.getElementById('saveinfo').style.display = 'block';
-	} else {
-          document.getElementById('saveinfo').style.display = 'none';
-	}
+		sucnodeid = elem[0].getAttribute('sucnodeid');
       }
       if (elem[0].getAttribute('noop') == '1') {
 	var testhealreport = document.getElementById('testhealreport');
@@ -386,11 +371,6 @@ function BED()
   info = document.getElementById('nodecntl');
   info.style.display = 'none';
   if (off) {
-    document.getElementById('homeid').value = '';
-    document.getElementById('cmode').value = ''; 
-    document.getElementById('nodecount').value = '';
-    document.getElementById('sucnodeid').value = '';
-    document.getElementById('saveinfo').style.display = 'none';
     document.getElementById('tbody').innerHTML= '';
     document.getElementById('divconfigcur').innerHTML = '';
     document.getElementById('divconfigcon').innerHTML = '';
@@ -556,7 +536,6 @@ function DoDevPost(fun)
 function DoNetHelp()
 {
   var ninfo = document.getElementById('netinfo');
-  var scencntl = document.getElementById('scencntl');
   var topocntl = document.getElementById('topocntl');
   var topo = document.getElementById('topo');
   var statcntl = document.getElementById('statcntl');
@@ -568,7 +547,6 @@ function DoNetHelp()
   if (document.NetPost.netops.value == 'topo') {
     ninfo.innerHTML = 'Topology views';
     ninfo.style.display = 'block';
-    scencntl.style.display = 'none';
     topocntl.style.display = 'block';
     topo.style.display = 'block';
     statcntl.style.display = 'none';
@@ -581,7 +559,6 @@ function DoNetHelp()
   } else if (document.NetPost.netops.value == 'stat') {
     ninfo.innerHTML = 'Statistic views';
     ninfo.style.display = 'block';
-    scencntl.style.display = 'none';
     topocntl.style.display = 'none';
     topo.style.display = 'none';
     statcntl.style.display = 'block';
@@ -593,7 +570,6 @@ function DoNetHelp()
   } else if (document.NetPost.netops.value == 'test') {
     ninfo.innerHTML = 'Test & Heal Network';
     ninfo.style.display = 'block';
-    scencntl.style.display = 'none';
     topocntl.style.display = 'none';
     topo.style.display = 'none';
     statcntl.style.display = 'none';
@@ -604,7 +580,6 @@ function DoNetHelp()
     testhealreport.style.display = 'block';
   } else {
     ninfo.style.display = 'none';
-    scencntl.style.display = 'none';
     topocntl.style.display = 'none';
     topo.style.display = 'none';
     statcntl.style.display = 'none';
