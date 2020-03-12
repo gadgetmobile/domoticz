@@ -1,4 +1,4 @@
-# Domoticz fork with BleBox suport
+# Domoticz fork with BleBox support
 
 The **master** branch here contains a major rework of BleBox devices support for Domoticz.
 
