@@ -1,43 +1,36 @@
-# Domoticz
+# Domoticz fork with BleBox suport
 
-Domoticz is a Home Automation System that lets you monitor and configure various devices like: Lights, Switches, various sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water and much more. Notifications/Alerts can be sent to any mobile device
+The **master** branch here contains a major rework of BleBox devices support for Domoticz.
 
-## Multi platform: Linux/Windows/Embedded Devices
+## Features
 
-This system is designed to operate in various operating systems.
-The user-interface is a scalable HTML5 web frontend, and is automatically adapted for Desktop and Mobile Devices.
-Compatible with all recent browsers
+- 11 BleBox devices supported (with minimal, reasonable functionality)
+- strong focus on quality (code/functionality/extensibility)
+- extensive unit tests
 
-Some Information
-- Hardware: RFXCOM Transceiver, Z-Wave, P1 Smart Meter, YouLess Meter, Pulse Counters, 1-Wire, Philips Hue and a lot more....
-- Extended logging
-- iPhone / Android / Windows 10 (Phone & Desktop) push notifications
-- Auto Learning sensors/switches
-- Manual creation of switch codes
-- Share / Use external devices
-- Designed for simplicity
 
-## Support
+## How do I use this?
 
-Your first place for support is the [Domoticz Forum](http://www.domoticz.com/forum)
+Build exactly the same way as the official Domoticz version.
 
-The Github issue tracker is NOT for end-user support.
+Builds (for amd64 for now) are here: https://github.com/gadgetmobile/domoticz-blebox-builds
 
-## Donations
-Donations are more than welcome and will be used to buy new hardware, devices, sensors, hosting and coffee.
-If you like the product or encourage the development, please use thelink:
+You may want to disable upgrades (which would give you the official version, without BleBox support).
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=6S2CXM772QY84&currency_code=EUR&source=url)
 
-# More information
-* Website: http://www.domoticz.com
-* Forum http://www.domoticz.com/forum
-* Wiki http://www.domoticz.com/wiki
+## Why is this not in the Official Domoticz version?
 
-### Build Status
+These changes were rejected by one of the Domoticz maintainers (for no acceptable reason IMHO).
 
-Status | Operating system
------------- | -------------
-[![Status Linux](https://travis-ci.org/domoticz/domoticz.svg?branch=master)](https://travis-ci.org/domoticz/domoticz) | Linux x86_64
-[![Status Windows](https://ci.appveyor.com/api/projects/status/fskiwvjs1q7svwq9?svg=true)](https://ci.appveyor.com/project/gizmocuz/domoticz) | Windows
+I personally highly recommend migrating from Domoticz to e.g. [Home Assistant](https://www.home-assistant.io/) as soon as you can. (There are lots of good reasons for doing so).
 
+However, if you're stuck with Domoticz, this fork is for you. (It closely follows the offical version, so you can BleBox support and lose nothing from the offical version).
+
+
+## Issues / support
+
+Feel free to report them here: https://github.com/gadgetmobile/domoticz-blebox-builds
+
+I've put in too much time into making Domoticz better, and I've happily switched to Home Assistant.
+
+So I don't plan to support this further, but do report any BleBox-specific issues.
